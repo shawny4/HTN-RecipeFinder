@@ -29,6 +29,7 @@ def search():
         "app_key": KEY,
         "from": 0,
         "to": 10,
+        "health": [],
     }
 
     try:
@@ -76,10 +77,14 @@ def get_parameters(response):
         url = str(data["hits"][0]["recipe"]["url"])
     if "image" in data["hits"][0]["recipe"]:
         image = str(data["hits"][0]["recipe"]["image"])
+    if "dietLabels" in data["hits"][0]["recipe"]:
+        dietLabels = data["hits"][0]["recipe"]["dietLabels"]
     if "ingredientLines" in data["hits"][0]["recipe"]:
         ingredients = data["hits"][0]["recipe"]["ingredientLines"]
+    if "calories" in data["hits"][0]["recipe"]:
+        calories = round(data["hits"][0]["recipe"]["calories"])
 
-    printout = [label, url, image, ingredients]
+    printout = [label, url, image, dietLabels, ingredients, calories]
 
 
 if __name__ == "__main__":
