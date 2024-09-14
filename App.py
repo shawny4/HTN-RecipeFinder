@@ -3,55 +3,85 @@ import requests
 
 app = Flask(__name__)
 
-@app.route('/')
+
+@app.route("/")
 def home():
-    return 'Hello World!'
-
-ID  = '1e3d80df'
-KEY = 'a5dc1f0f05d4100186953180b1c1bc3a'
-URL = 'https://api.edamam.com/api/recipes/v2'
+    return "Hello World!"
 
 
-@app.route('/recipe', methods=['GET'])
+ID = "1e3d80df"
+KEY = "a5dc1f0f05d4100186953180b1c1bc3a"
+URL = "https://api.edamam.com/api/recipes/v2"
+
+
+@app.route("/recipe", methods=["GET"])
 def search():
-    query = request.args.get('q')
+    """
+    query = request.args.get("q")
     if not query:
-        return jsonify({'error': 'No query provided'}), 400
+        return jsonify({"error": "No query provided"}), 400
+    """
     params = {
-        'type': 'public',
-        'q': query,
-        'app_id': ID,
-        'app_key': KEY,
-        'from': 0,
-        'to': 2
+        "type": "public",
+        # placeholder query
+        "q": "hamburger",
+        "app_id": ID,
+        "app_key": KEY,
+        "from": 0,
+        "to": 10,
     }
 
     try:
         response = requests.get(URL, params=params)
-        label = 'None'
-        url = 'None'
-        image = 'None'
-        ingredients = []
-        if response.status_code == 200:
-            data = response.json()
-            print(data['hits'][0]['recipe'])
-            if 'label' in data['hits'][0]['recipe']:
-                label = str(data['hits'][0]['recipe']['label'])
-            if 'url' in data['hits'][0]['recipe']:
-                url = str(data['hits'][0]['recipe']['url'])
-            if 'image' in data['hits'][0]['recipe']:
-                image = str(data['hits'][0]['recipe']['image'])
-            if 'ingredientLines' in data['hits'][0]['recipe']:
-                ingredients = data['hits'][0]['recipe']['ingredientLines']
 
-            printout = [label, url, image, ingredients]
-            return printout
+        if response.status_code == 200:
+            return get_parameters(response)
         else:
-            return jsonify({"error":"Bitch"}), response.status_code
+            return jsonify({"error"}), response.status_code
 
     except Exception as e:
-        return jsonify({"error":str(e)}), response.status_code
+        return jsonify({"error": str(e)}), response.status_code
 
 
-if __name__ == '__main__':
+# Example request
+def example_request():
+    params = {
+        "q": "pasta",
+        "type": "public",
+        "app_id": ID,
+        "app_key": KEY,
+        "from": 0,
+        "to": 10,
+    }
+
+    try:
+        response = requests.get(URL, params=params)
+        response.raise_for_status()
+
+        # Print all recipes
+        print(get_parameters(response))
+
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+
+
+def get_parameters(response):
+    ingredients = []
+
+    data = response.json()
+    print(data["hits"][0]["recipe"])
+    if "label" in data["hits"][0]["recipe"]:
+        label = str(data["hits"][0]["recipe"]["label"])
+    if "url" in data["hits"][0]["recipe"]:
+        url = str(data["hits"][0]["recipe"]["url"])
+    if "image" in data["hits"][0]["recipe"]:
+        image = str(data["hits"][0]["recipe"]["image"])
+    if "ingredientLines" in data["hits"][0]["recipe"]:
+        ingredients = data["hits"][0]["recipe"]["ingredientLines"]
+
+    printout = [label, url, image, ingredients]
+
+
+if __name__ == "__main__":
+    search()
     app.run(debug=True)
