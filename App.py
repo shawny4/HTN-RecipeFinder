@@ -70,7 +70,6 @@ def get_parameters(response):
     ingredients = []
 
     data = response.json()
-    print(data["hits"][0]["recipe"])
     if "label" in data["hits"][0]["recipe"]:
         label = str(data["hits"][0]["recipe"]["label"])
     if "url" in data["hits"][0]["recipe"]:
@@ -85,8 +84,10 @@ def get_parameters(response):
         calories = round(data["hits"][0]["recipe"]["calories"])
 
     printout = [label, url, image, dietLabels, ingredients, calories]
+    return printout
 
 
 if __name__ == "__main__":
-    search()
+    # debugging purposes
+    print(search())
     app.run(debug=True)
