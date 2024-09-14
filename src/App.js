@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import RecipeList from './RecipeList.js';
+import Header from './Header.js';
+
 import './styles/App.css';
 import { getFromFlask } from './api.js';
 
@@ -16,8 +18,9 @@ function App() {
   
   return (
     <div className="App">
-      <header className="content">
-        <p>Hello World</p>
+      <Header></Header>
+      <header className="content-app">
+        
         <RecipeList></RecipeList>
       </header>
     </div>

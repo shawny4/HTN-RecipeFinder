@@ -2,4 +2,9 @@
   text-align: center;
 }
 
-
+.content-App{
+  display: flex;
+  flex-direction: column; /* Stacks the RecipeItem components vertically */
+  gap: 20px; /* Adds some space between each RecipeItem */
+  align-items: right;
+}
